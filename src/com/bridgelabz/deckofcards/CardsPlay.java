@@ -29,9 +29,9 @@ public class CardsPlay {
 
 	public void printCards() {
 
-		System.out.print("Cards : ");
+		System.out.println("Cards ");
 		for (int i = 0; i < cardsArr.size(); i++) {
-			System.out.print(" " + cardsArr.get(i) + "\n");
+			System.out.print(" " + cardsArr.get(i) + " ");
 		}
 	}
 
@@ -49,9 +49,26 @@ public class CardsPlay {
 		}
 	}
 
-	public String getCards() {
+	public void shuffleCards() {
+		for (int i = 0; i < cardsArr.size(); i++) {
+			int min = 0;
+			int max = cardsArr.size() - 1;
+			int position = (int) (Math.random() * (max - min + 1) + min);
+			int newPosition = (position - i);
+			if (newPosition < 0 || newPosition > 52)
+				newPosition = 0;
+			String temp = cardsArr.get(newPosition);
+			cardsArr.set(newPosition, cardsArr.get(i));
+			cardsArr.set(i, temp);
+		}
+	}
 
-		int position = (int) (Math.random());
+	public String getCards() {
+		int min = 0;
+		int max = cardsArr.size() - 1;
+		int position = (int) (Math.random() * (max - min + 1) + min);
+		System.out.print("\n Size : " + cardsArr.size() + ", position : " + position);
+
 		String returnValue = cardsArr.get(position);
 		cardsArr.remove(position);
 		return returnValue;
@@ -62,7 +79,7 @@ public class CardsPlay {
 			for (Player playerObj : playerList) {
 
 				playerObj.setCardList(getCards());
-
+				shuffleCards();
 			}
 		}
 	}
@@ -74,6 +91,26 @@ public class CardsPlay {
 			System.out.print("\ncards of " + playerObj.name + " : ");
 			playerObj.getCardList();
 			System.out.print("\n ");
+		}
+	}
+
+	public void setPlayerSequence() {
+
+		Scanner sc = new Scanner(System.in);
+		int PlaylistSize = playerList.size();
+
+		for (int i = 0; i < PlaylistSize; i++) {
+
+			Player temp = playerList.get(i);
+			System.out.print("\n Set player position for (staring from 0) " + temp.name + " : ");
+			int newPosition = sc.nextInt();
+			if (newPosition > PlaylistSize || newPosition < 0) {
+				System.out.print("\n Invalid position !!");
+				return;
+			}
+
+			playerList.set(i, playerList.get(newPosition));
+			playerList.set(newPosition, temp);
 		}
 	}
 }
